@@ -173,22 +173,15 @@ public class HandEvaluatorTests
 
     // ---- Input checks ----
 
-    [Fact]
-    public void FiveCards_AreAccepted()
+    // Showdown is always 2 hole cards + 5 board cards.
+    [Theory]
+    [InlineData("Ah Kh Qh Jh")]
+    [InlineData("Ah Kh Qh Jh Th")]
+    [InlineData("Ah Kh Qh Jh Th 9h")]
+    [InlineData("Ah Kh Qh Jh Th 9h 8h 7h")]
+    public void AnythingButSevenCards_Throws(string cards)
     {
-        AssertHand("Ah Kh Qh Jh Th", HandCategory.StraightFlush, [Rank.Ace]);
-    }
-
-    [Fact]
-    public void FourCards_Throws()
-    {
-        Assert.Throws<ArgumentException>(() => HandEvaluator.Evaluate(Cards("Ah Kh Qh Jh")));
-    }
-
-    [Fact]
-    public void EightCards_Throws()
-    {
-        Assert.Throws<ArgumentException>(() => HandEvaluator.Evaluate(Cards("Ah Kh Qh Jh Th 9h 8h 7h")));
+        Assert.Throws<ArgumentException>(() => HandEvaluator.Evaluate(Cards(cards)));
     }
 
     private static void AssertHand(string cards, HandCategory category, Rank[] tieBreakers)
